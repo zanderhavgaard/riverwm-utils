@@ -1,1 +1,1 @@
-pywayland==0.4.7
+pywayland==0.4.18
