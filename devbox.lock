@@ -1,0 +1,129 @@
+{
+  "lockfile_version": "1",
+  "packages": {
+    "github:NixOS/nixpkgs/nixpkgs-unstable": {
+      "resolved": "github:NixOS/nixpkgs/ebe4301cbd8f81c4f8d3244b3632338bbeb6d49c?lastModified=1744868846&narHash=sha256-5RJTdUHDmj12Qsv7XOhuospjAjATNiTMElplWnJE9Hs%3D"
+    },
+    "pylint@latest": {
+      "last_modified": "2025-03-23T05:31:05Z",
+      "resolved": "github:NixOS/nixpkgs/dd613136ee91f67e5dba3f3f41ac99ae89c5406b#pylint",
+      "source": "devbox-search",
+      "version": "3.3.3",
+      "systems": {
+        "aarch64-darwin": {
+          "outputs": [
+            {
+              "name": "out",
+              "path": "/nix/store/xrva0vcyg0ldln600h6j60plq5gjnvcs-python3.12-pylint-3.3.3",
+              "default": true
+            },
+            {
+              "name": "dist",
+              "path": "/nix/store/7fzm4g559m03x8l2jvqhk0b296xw68bd-python3.12-pylint-3.3.3-dist"
+            }
+          ],
+          "store_path": "/nix/store/xrva0vcyg0ldln600h6j60plq5gjnvcs-python3.12-pylint-3.3.3"
+        },
+        "aarch64-linux": {
+          "outputs": [
+            {
+              "name": "out",
+              "path": "/nix/store/g70h0sixq841ylw3dkrdfg7wr2y5w27g-python3.12-pylint-3.3.3",
+              "default": true
+            },
+            {
+              "name": "dist",
+              "path": "/nix/store/k2agzzq2l6rmglakjyg967c9jv9lym1z-python3.12-pylint-3.3.3-dist"
+            }
+          ],
+          "store_path": "/nix/store/g70h0sixq841ylw3dkrdfg7wr2y5w27g-python3.12-pylint-3.3.3"
+        },
+        "x86_64-darwin": {
+          "outputs": [
+            {
+              "name": "out",
+              "path": "/nix/store/zsi2m8fy4d2j4gqmh18cvvph4n2y3cvj-python3.12-pylint-3.3.3",
+              "default": true
+            },
+            {
+              "name": "dist",
+              "path": "/nix/store/bpw6gx63hs43b893hcz2vwfg0lq2waah-python3.12-pylint-3.3.3-dist"
+            }
+          ],
+          "store_path": "/nix/store/zsi2m8fy4d2j4gqmh18cvvph4n2y3cvj-python3.12-pylint-3.3.3"
+        },
+        "x86_64-linux": {
+          "outputs": [
+            {
+              "name": "out",
+              "path": "/nix/store/4k9cs9xy4rr2b33d3cb02q5pg2g97f2l-python3.12-pylint-3.3.3",
+              "default": true
+            },
+            {
+              "name": "dist",
+              "path": "/nix/store/fr40jcf6c51w93ag8kix3kn4vv9knhr5-python3.12-pylint-3.3.3-dist"
+            }
+          ],
+          "store_path": "/nix/store/4k9cs9xy4rr2b33d3cb02q5pg2g97f2l-python3.12-pylint-3.3.3"
+        }
+      }
+    },
+    "python@3.11": {
+      "last_modified": "2025-03-11T17:52:14Z",
+      "plugin_version": "0.0.4",
+      "resolved": "github:NixOS/nixpkgs/0d534853a55b5d02a4ababa1d71921ce8f0aee4c#python311",
+      "source": "devbox-search",
+      "version": "3.11.11",
+      "systems": {
+        "aarch64-darwin": {
+          "outputs": [
+            {
+              "name": "out",
+              "path": "/nix/store/qlkbw05sxfhpkfp8qin1rgdpgqai4mkk-python3-3.11.11",
+              "default": true
+            }
+          ],
+          "store_path": "/nix/store/qlkbw05sxfhpkfp8qin1rgdpgqai4mkk-python3-3.11.11"
+        },
+        "aarch64-linux": {
+          "outputs": [
+            {
+              "name": "out",
+              "path": "/nix/store/05nd7sn8k3pif1358z6vpd0bdi5hs77f-python3-3.11.11",
+              "default": true
+            },
+            {
+              "name": "debug",
+              "path": "/nix/store/4smb0bxpqm2rrvrk54v1kjbhwqsazahj-python3-3.11.11-debug"
+            }
+          ],
+          "store_path": "/nix/store/05nd7sn8k3pif1358z6vpd0bdi5hs77f-python3-3.11.11"
+        },
+        "x86_64-darwin": {
+          "outputs": [
+            {
+              "name": "out",
+              "path": "/nix/store/fsndkk9svb250xnbvsfadc9vpq0dy9da-python3-3.11.11",
+              "default": true
+            }
+          ],
+          "store_path": "/nix/store/fsndkk9svb250xnbvsfadc9vpq0dy9da-python3-3.11.11"
+        },
+        "x86_64-linux": {
+          "outputs": [
+            {
+              "name": "out",
+              "path": "/nix/store/89h7ppmyqv2fjq3apz7hv8323v9n4w3g-python3-3.11.11",
+              "default": true
+            },
+            {
+              "name": "debug",
+              "path": "/nix/store/z2bg61f6r097idpj16iz29jllns6xlky-python3-3.11.11-debug"
+            }
+          ],
+          "store_path": "/nix/store/89h7ppmyqv2fjq3apz7hv8323v9n4w3g-python3-3.11.11"
+        }
+      }
+    }
+  }
+}
