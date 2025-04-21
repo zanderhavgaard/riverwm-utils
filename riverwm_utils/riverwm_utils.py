@@ -5,66 +5,120 @@ import os
 import argparse
 import struct
 
-# pylint: disable=global-statement
-try:
-    from pywayland.protocol.wayland import WlOutput
-    from pywayland.protocol.wayland import WlSeat
-    from pywayland.protocol.wayland import WlRegistry
-    from pywayland.protocol.river_control_unstable_v1 import ZriverControlV1
-    from pywayland.protocol.river_status_unstable_v1 import (
-        ZriverStatusManagerV1,
-    )  # noqa: E501
-except ModuleNotFoundError:
+
+def ensure_river_bindings(cache_dir: str) -> None:
+    """
+    Try importing the river bindings; if missing, generate them into `cache_dir`.
+    Exits on failure.
+    """
+    # make sure cache is in sys.path before any import
+    if cache_dir not in sys.path:
+        sys.path.insert(0, cache_dir)
+
     try:
-        from pywayland.scanner.protocol import Protocol
         import pywayland
+        import pywayland.protocol.river_control_unstable_v1  # noqa: F401
+        import pywayland.protocol.river_status_unstable_v1  # noqa: F401
+        import pywayland.protocol.wayland  # noqa: #F401
 
-        this_dir = os.path.split(__file__)[0]
-        protocol_dir = os.path.join(this_dir)
-        input_files = [
-            "wayland.xml",
-            "river-control-unstable-v1.xml",
-            "river-status-unstable-v1.xml",
-        ]
+        return
+    except ModuleNotFoundError:
+        print("River bindings missing, generating into", cache_dir)
+        try:
+            _generate_river_wayland_protocol_files(cache_dir)
+            print("Bindings generated—please rerun the command.")
+            sys.exit(0)
+        except Exception as e:
+            sys.exit(f"Failed to generate bindings: {e!r}")
 
-        protocols = [
-            Protocol.parse_file(os.path.join(protocol_dir, input_file))
-            for input_file in input_files
-        ]
-        protocol_imports = {
-            interface.name: protocol.name
-            for protocol in protocols
-            for interface in protocol.interface
-        }
 
-        pywayland_dir = os.path.split(pywayland.__file__)[0]
-        output_dir = os.path.join(pywayland_dir, "protocol")
-        for protocol in protocols:
-            protocol.output(output_dir, protocol_imports)
-        print("Generated river bindings.")
-        print("Please try running cycle-focused-tags again.")
+def _generate_river_wayland_protocol_files(cache_dir: str) -> None:
+    from pywayland.scanner.protocol import Protocol
+    import pywayland
 
-    except ImportError:
-        THIS_DIR = os.path.split(__file__)[0]
-        PROTOCOL_DIR = os.path.normpath(os.path.join(THIS_DIR, "..", "protocol"))
-        ERROR_TEXT = (
-            f"""
-        Your pywayland package does not have bindings for
-        river-control-unstable-v1 and/or river-status-unstable-v1.
+    xml_dir = os.path.dirname(__file__)
+    inputs = (
+        "wayland.xml",
+        "river-control-unstable-v1.xml",
+        "river-status-unstable-v1.xml",
+    )
+    protocols = [Protocol.parse_file(os.path.join(xml_dir, f)) for f in inputs]
 
-        An attempt was made to generate them but it failed. You may be able to
-        generate the manually with the following command:
+    # create package dirs
+    base_pkg = os.path.join(cache_dir, "pywayland")
+    out_pkg = os.path.join(base_pkg, "protocol")
+    os.makedirs(out_pkg, exist_ok=True)
+    for pkg in (base_pkg, out_pkg):
+        init_py = os.path.join(pkg, "__init__.py")
+        if not os.path.exists(init_py):
+            open(init_py, "w").close()
 
-        python3 -m pywayland.scanner -i {PROTOCOL_DIR}/wayland.xml """
-            f"{PROTOCOL_DIR}/river-control-unstable-v1.xml "
-            f"{PROTOCOL_DIR}/river-status-unstable-v1.xml"
-        )
+    # now that sys.path[0] == cache_dir, imports will see them
+    if cache_dir not in sys.path:
+        sys.path.insert(0, cache_dir)
 
-        print(ERROR_TEXT)
+    # write out each protocol
+    imports = {
+        interface.name: protocol.name
+        for protocol in protocols
+        for interface in protocol.interface
+    }
+    for proto in protocols:
+        proto.output(out_pkg, imports)
 
-    sys.exit()
+
+# def _generate_river_wayland_protocol_files(cache_dir: str) -> None:
+#     from pywayland.scanner.protocol import Protocol
+#     import pywayland
+#
+#     xml_dir = os.path.dirname(__file__)
+#     inputs = (
+#         "wayland.xml",
+#         "river-control-unstable-v1.xml",
+#         "river-status-unstable-v1.xml",
+#     )
+#     protocols = [Protocol.parse_file(os.path.join(xml_dir, f)) for f in inputs]
+#
+#     # make sure protocols directory is created
+#     generated_protocol_output_dir = os.path.join(cache_dir, "pywayland", "protocol")
+#     os.makedirs(generated_protocol_output_dir, exist_ok=True)
+#
+#     # add init file to make generated protcol files importable
+#     init_py = os.path.join(generated_protocol_output_dir, "__init__.py")
+#     if not os.path.exists(init_py):
+#         open(init_py, "w").close()
+#
+#     # make Python find it
+#     if cache_dir not in sys.path:
+#         sys.path.insert(0, cache_dir)
+#
+#     # write out each protocol
+#     imports = {
+#         interface.name: protocol.name
+#         for protocol in protocols
+#         for interface in protocol.interface
+#     }
+#     for proto in protocols:
+#         proto.output(generated_protocol_output_dir, imports)
+
+
+CACHE_DIR_PATH = os.path.expanduser(
+    os.environ.get("XDG_CACHE_HOME", "~/.cache/riverwm-utils")
+)
+
+ensure_river_bindings(CACHE_DIR_PATH)
+
+breakpoint()
+
+
+# now imports succeed and you can pull in all the classes safely:
+from pywayland.protocol.wayland import WlOutput, WlSeat, WlRegistry
+from pywayland.protocol.river_control_unstable_v1 import ZriverControlV1
+from pywayland.protocol.river_status_unstable_v1 import ZriverStatusManagerV1
 
 from pywayland.client import Display  # pylint: disable=import-error
+
+breakpoint()
 
 
 STATUS_MANAGER = None
